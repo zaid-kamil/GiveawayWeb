@@ -6,8 +6,9 @@ from comments.models import Comment
 class CommentForm(forms.ModelForm):
     class Meta:
         model = Comment
-        fields = ["content", "article_id"]
+        fields = ["content", "gid", 'user', ]
         widgets = {
-            "content": forms.Textarea(),
-            "article_id": forms.HiddenInput()
+            "content": forms.Textarea(attrs={'class': 'mdl-textfield__input','placeholder':'Add a new comment'}),
+            "gid": forms.HiddenInput(),
+            "user": forms.HiddenInput()
         }

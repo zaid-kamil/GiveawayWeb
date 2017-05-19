@@ -15,16 +15,8 @@ class ProfileInline(admin.StackedInline):
 
 class CustomUserAdmin(UserAdmin):
     inlines = (ProfileInline,)
-    list_display = ('username', 'email', 'first_name', 'last_name', 'is_staff', 'get_role')
+    list_display = ('username', 'email', 'first_name', 'last_name', 'is_staff',)
     list_select_related = ('profile',)
-
-    def get_location(self, instance):
-        return instance.profile.location
-
-    def get_role(self, instance):
-        return instance.profile.role
-
-    get_location.short_description = 'Location'
 
     def get_inline_instances(self, request, obj=None):
         if not obj:

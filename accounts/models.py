@@ -7,18 +7,10 @@ from django.dispatch import receiver
 
 
 class Profile(models.Model):
-    VISITOR = 1
-    CREATOR = 2
-    ADMIN = 3
-    ROLE_CHOICES = (
-        (VISITOR, 'Visitor'),
-        (CREATOR, 'Creator'),
-        (ADMIN, 'admin'),
-    )
+
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     location = models.CharField(max_length=30, blank=True)
     birthdate = models.DateField(null=True, blank=True)
-    role = models.PositiveSmallIntegerField(choices=ROLE_CHOICES, null=True, blank=True)
 
     def __str__(self):  # __unicode__ for Python 2
         return self.user.username

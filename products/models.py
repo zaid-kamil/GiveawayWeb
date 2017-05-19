@@ -6,58 +6,55 @@ from django.utils.timezone import now
 
 # Create your models here.
 class Product(models.Model):
-    name = models.CharField(max_length=50)
-    creator = models.ForeignKey("auth.User")
-    category = models.CharField(max_length=100)
+    p_name = models.CharField(max_length=50, default="product")
+    creator = models.ForeignKey("auth.User", default=1)
+    category = models.CharField(max_length=100, default='software')
     main_image = models.ImageField(upload_to="Products/", null=True)
-    screenshot2 = models.ImageField(upload_to="products/", null=True)
+    screenshot2 = models.ImageField(upload_to="products/", null=True, )
     screenshot3 = models.ImageField(upload_to="products/", null=True)
-
-    created = models.DateField(default=now)
-    updated = models.DateField(default=now)
-    actual_price = models.IntegerField()
-    quantity = models.IntegerField()
-    product_file = models.FileField(upload_to="doc_files", null=False)
+    created = models.DateField(default=now, null=True)
+    updated = models.DateField(default=now, null=True)
+    actual_price = models.IntegerField(default=2000)
+    quantity = models.IntegerField(default=5)
+    product_file = models.FileField(upload_to="doc_files", null=True, blank=True)
 
     def publish(self):
         self.save()
 
     def __str__(self):
-        return self.name
+        return self.p_name
 
 
 class Giveaway(models.Model):
-    name = models.CharField(max_length=55,blank=False, null=False)
-    user = models.ForeignKey("auth.User")
-    product_name = models.ForeignKey("Product")
-    entries = models.IntegerField()
+    g_name = models.CharField(max_length=55, blank=False, null=False, default="my giveaway")
+    user = models.ForeignKey("auth.User", default=1)
+    p_name = models.ForeignKey("Product", default=1)
+    entries = models.IntegerField(default=5)
     created = models.DateField(default=now)
     updated = models.DateField(default=now)
     image = models.ImageField(upload_to="giveaways/Img/", null=True)
-
-    description = models.TextField( blank=False, null=False)
-    prize = models.IntegerField()
+    description = models.TextField(blank=False, null=False, default="No description avaiable")
     ending_time = models.DateField(default=now)
+    comments = models.IntegerField(default=0)
 
     def publish(self):
         self.save()
 
     def __str__(self):
-        return self.name
+        return self.g_name
 
 
-class Entry(models.Model):
-    user_name = models.ForeignKey("auth.User")
-    giveaway = models.ForeignKey("Giveaway")
-    facebook_share = models.TextField(blank=True, null=True)
-    twitter_share = models.TextField(blank=True, null=True)
-    google_plus_share = models.TextField(blank=True, null=True)
+class GiveawayEntry(models.Model):
+    user = models.PositiveIntegerField("auth.User", default=1)
+    giveaway = models.PositiveIntegerField("Giveaway", default=1)
     created_on = models.DateField(default=now)
     updated = models.DateField(default=now)
-    total_points = models.IntegerField()
+    total_points = models.IntegerField(default=0)
     facebook_share_count = models.IntegerField(default=0)
     twitter_share_count = models.IntegerField(default=0)
     google_plus_share_count = models.IntegerField(default=0)
+    stumble_share_count = models.IntegerField(default=0)
+    linked_share_count = models.IntegerField(default=0)
 
     def publish(self):
         self.save()

@@ -45,7 +45,8 @@ INSTALLED_APPS = [
     'crispy_forms',
     'markdown_deux',
     'pagedown',
-    'tellme'
+    'tellme',
+    'star_ratings',
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap3'

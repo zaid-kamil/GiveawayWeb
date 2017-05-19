@@ -28,11 +28,11 @@ urlpatterns = [
     url(r'^accounts/', include("accounts.urls", namespace='accounts')),
     url(r'', include("products.urls", namespace='products')),
     url(r'', include("web.urls", namespace='web')),
+    url(r'', include("products.urls", namespace='giveaway')),
     url(r'^tellme/', include("tellme.urls")),
     url(r'^login/', login_view, name="login"),
     url(r'^logout/', logout_view, name="logout"),
-    url(r'^register/', register_view, name="register"),
-]
+    url(r'^register/', register_view, name="register"),]
 if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

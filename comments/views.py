@@ -72,7 +72,3 @@ def comment_thread(request, id):
     }
     return render(request, "comment_thread.html", context)
 
-
-from django.shortcuts import render
-
-# Create your views here.

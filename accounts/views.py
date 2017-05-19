@@ -1,12 +1,13 @@
-from django.shortcuts import render, redirect
 from django.contrib.auth import (
     authenticate,
-    get_user_model,
     login,
     logout,
 )
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, redirect
+
+from products.models import Giveaway, GiveawayEntry, Product
 from .forms import UserLoginForm, UserRegistration
-from products.models import Product, Giveaway
 
 
 # Create your views here.
@@ -42,17 +43,21 @@ def register_view(request):
         "form": form,
         "title": title
     }
-    return render(request, "form.html", context)
+    return render(request, "register.html", context)
 
 
 def logout_view(request):
     logout(request)
     return redirect("/")
 
-
+@login_required(login_url='/login/')
 def show_dash(request):
-    # Product.objects.filter(creator=request.user)
-    # Giveaway.objects.filter(creator=request.user)
-
-    context = {}
-    return render(request, 'dashboard.html', context)
+    entries = GiveawayEntry.objects.filter(user=request.user.id)
+    giveaways = Giveaway.objects.all()
+    products = Product.objects.all()
+    context = {
+        'entries': entries,
+        'giveaways': giveaways,
+        'products': products
+    }
+    return render(request, 'profile_dashboard.html', context)

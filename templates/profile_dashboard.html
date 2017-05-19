@@ -1,0 +1,41 @@
+{% extends 'dashboard.html' %}
+{% load staticfiles %}
+{% block formblock %}
+    {% if user.is_authenticated %}
+
+
+        {% if user.userprofile.profile_picture.url %}
+            <img src="{{ user.userprofile.profile_picture.url }}" width="150" height="150"/>
+        {% else %}
+            <img src="{% static 'assets/android-desktop.png' %}" width="150" height="150"/>
+        {% endif %}
+        <span>{{ user.email }}</span>
+        <h4>{{ user.username }} welcome to your profile page</h4>
+
+
+        <h3>Instructions</h3>
+        <ul>
+            <li>Click on product to add products</li>
+            <li>Click on giveaways to add a new giveaway</li>
+        </ul>
+    {% endif %}
+{% endblock %}
+
+{% block download %}
+    <div class="mdl-card__actions mdl-card--border">
+        {% for entry in entries %}
+            {% if entry.total_points > 26 %}
+                {% for giveaway in giveaways %}
+                    {% if giveaway.id == entry.giveaway %}
+                        {% for pro in products %}
+                            {% if pro == giveaway.p_name %}
+                                <a href="{{ pro.product_file.url }}" target="_blank"
+                                   class="mdl-button mdl-js-button mdl-js-ripple-effect">download {{ pro.product_file }}</a>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+        {% endfor %}
+    </div>
+{% endblock download %}

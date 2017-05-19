@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="description" content="A front-end template that helps you build fast, modern mobile web apps.">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Material Design Lite</title>
+    <title>Material Dessign Lite</title>
 
     <!-- Add to homescreen for Chrome on Android -->
     <meta name="mobile-web-app-capable" content="yes">
@@ -49,46 +49,28 @@
 </head>
 <body>
 <div class="demo-layout mdl-layout mdl-js-layout mdl-layout--fixed-drawer mdl-layout--fixed-header">
-    {%  include 'dash_header.html' %}
+    {% include 'dash_header.html' %}
     <div class="demo-drawer mdl-layout__drawer mdl-color--blue-grey-900 mdl-color-text--blue-grey-50">
         <header class="demo-drawer-header">
-            <img src="{% static 'dashboard/images/user.jpg' %}" class="demo-avatar">
+            <img src="{% static 'dashboard/images/dog.png' %}" class="demo-avatar">
             <div class="demo-avatar-dropdown">
-                <span>hello@example.com</span>
+                <span>{{ user.username }}</span>
                 <div class="mdl-layout-spacer"></div>
-                <button id="accbtn" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
-                    <i class="material-icons" role="presentation">arrow_drop_down</i>
-                    <span class="visuallyhidden">Accounts</span>
-                </button>
-                <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="accbtn">
-                    <li class="mdl-menu__item">hello@example.com</li>
-                    <li class="mdl-menu__item">info@example.com</li>
-                    <li class="mdl-menu__item"><i class="material-icons">add</i>Add another account...</li>
-                </ul>
             </div>
         </header>
         <nav class="demo-navigation mdl-navigation mdl-color--blue-grey-800">
-            <a class="mdl-navigation__link" href=""><i class="mdl-color-text--blue-grey-400 material-icons"
-                                                       role="presentation">home</i>Home</a>
-            <a class="mdl-navigation__link" href=""><i class="mdl-color-text--blue-grey-400 material-icons"
-                                                       role="presentation">inbox</i>Inbox</a>
-            <a class="mdl-navigation__link" href=""><i class="mdl-color-text--blue-grey-400 material-icons"
-                                                       role="presentation">delete</i>Trash</a>
-            <a class="mdl-navigation__link" href=""><i class="mdl-color-text--blue-grey-400 material-icons"
-                                                       role="presentation">report</i>Spam</a>
-            <a class="mdl-navigation__link" href=""><i class="mdl-color-text--blue-grey-400 material-icons"
-                                                       role="presentation">forum</i>Forums</a>
-            <a class="mdl-navigation__link" href=""><i class="mdl-color-text--blue-grey-400 material-icons"
-                                                       role="presentation">flag</i>Updates</a>
-            <a class="mdl-navigation__link" href=""><i class="mdl-color-text--blue-grey-400 material-icons"
-                                                       role="presentation">local_offer</i>Promos</a>
-            <a class="mdl-navigation__link" href=""><i class="mdl-color-text--blue-grey-400 material-icons"
-                                                       role="presentation">shopping_cart</i>Purchases</a>
-            <a class="mdl-navigation__link" href=""><i class="mdl-color-text--blue-grey-400 material-icons"
-                                                       role="presentation">people</i>Social</a>
-            <div class="mdl-layout-spacer"></div>
-            <a class="mdl-navigation__link" href=""><i class="mdl-color-text--blue-grey-400 material-icons"
-                                                       role="presentation">help_outline</i><span class="visuallyhidden">Help</span></a>
+            <a class="mdl-navigation__link" href="{% url 'web:home' %}"><i
+                    class="mdl-color-text--blue-grey-400 material-icons"
+                    role="presentation">home</i>Home</a>
+            <a class="mdl-navigation__link" href="{% url 'giveaway:add_giveaway' %} "><i
+                    class="mdl-color-text--blue-grey-400 material-icons"
+                    role="presentation">list</i>Giveaway</a>
+            <a class="mdl-navigation__link" href="{% url 'giveaway:add_product' %}"><i
+                    class="mdl-color-text--blue-grey-400 material-icons"
+                    role="presentation">list</i>Product</a>
+            <a class="mdl-navigation__link" href="{% url 'accounts:dashboard' %}"><i
+                    class="mdl-color-text--blue-grey-400 material-icons"
+                    role="presentation">report</i>Profile</a>
         </nav>
     </div>
     <main class="mdl-layout__content mdl-color--grey-100">
@@ -97,7 +79,17 @@
 
             </div>
             <div class="demo-graphs mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--8-col">
-
+                {% if messages %}
+                    <ul class="messages">
+                        {% for message in messages %}
+                            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>
+                                {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}Important: {% endif %}
+                                {{ message }}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+                {% block formblock %}{% endblock %}
             </div>
             <div class="demo-cards mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet mdl-grid mdl-grid--no-spacing">
                 <div class="demo-updates mdl-card mdl-shadow--2dp mdl-cell mdl-cell--4-col mdl-cell--4-col-tablet mdl-cell--12-col-desktop">
@@ -105,11 +97,10 @@
                         <h2 class="mdl-card__title-text">Updates</h2>
                     </div>
                     <div class="mdl-card__supporting-text mdl-color-text--grey-600">
-                        Non dolore elit adipisicing ea reprehenderit consectetur culpa.
+                        List of Giveways won by you, click on the button to download the giveaway
                     </div>
-                    <div class="mdl-card__actions mdl-card--border">
-                        <a href="#" class="mdl-button mdl-js-button mdl-js-ripple-effect">Read More</a>
-                    </div>
+                    {% block download %}
+                    {% endblock download %}
                 </div>
                 <div class="demo-separator mdl-cell--1-col"></div>
                 <div class="demo-options mdl-card mdl-color--deep-purple-500 mdl-shadow--2dp mdl-cell mdl-cell--4-col mdl-cell--3-col-tablet mdl-cell--12-col-desktop">
@@ -154,7 +145,7 @@
     </main>
 </div>
 
-
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
 <script src="{% static 'js/material.min.js' %}"></script>
 </body>
 </html>
